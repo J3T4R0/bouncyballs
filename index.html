@@ -1,0 +1,54 @@
+
+<html>
+
+  <head>
+    <script src='bundle.js' defer></script>
+  </head>
+
+  <style>
+    body {
+      margin: 0px;
+    }
+
+    .flex-center {
+      background: rgb(35,35,35);
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bottom-right {
+      position: fixed;
+      right: 0px;
+      bottom: 0px;
+    }
+
+  </style>
+
+  <body>
+
+    <div class='flex-center'>
+      <canvas id='render-canvas'></canvas>
+    </div>
+
+    <a href="https://wwwtyro.net/2018/02/25/caffeine.html">
+      <img class='bottom-right' src='https://wwwtyro.net/media/tut-bottom-right.png'>
+    </a>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-86179738-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+  </body>
+
+</html>
