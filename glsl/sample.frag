@@ -22,10 +22,8 @@ const element N = element(0.710, vec3(0.188, 0.314, 0.973));
 const element C = element(0.730, vec3(0.565, 0.565, 0.565));
 const element O = element(0.660, vec3(1.000, 0.051, 0.051));
 
-struct atom {
-  vec3 position;
-  element element;
-};
+// create struct called atom that holds a vec3 of position and an element called element
+
 
 
 atom atoms[24];
@@ -100,46 +98,31 @@ bool intersect(vec3 r0, vec3 rd, out vec3 pos, out vec3 norm, out vec3 color, ou
   for (int i = 0; i < 24; i++) {
     vec3 s = vec3(model * vec4(atoms[i].position, 1));
     if (raySphereIntersect(r0, rd, s, atoms[i].element.radius * 1.2, t)) {
-      if (t < tmin) {
-        tmin = t;
-        pos = r0 + rd * t;
-        norm = normalize(pos - s);
-        roughness = atom_roughness;
-        color = atoms[i].element.color;
-        light = false;
-        hit = true;
-      }
-    }
-  }
+      // if t < tmin then set tmin to t
+      // pos is equal to r0 + rd * t
+      // set norm to normalize(pos - s)
+      // color is atoms[i].element.color
+      // set light to false and hit = true
+    
   t = (-2.0 - r0.y) / rd.y;
-  if (t < tmin && t > 0.0) {
-    tmin = t;
-    pos = r0 + rd * t;
-    norm = vec3(0,1,0);
-    color = vec3(1, 0.40, 0.06125) * 0.25;
-    roughness = coffee_roughness;
-    light = false;
-    hit = true;
-  }
-  if (raySphereIntersect(r0, rd, lightPos, light_radius, t)) {
-    if (t < tmin) {
-      tmin = t;
-      pos = r0 + rd * t;
-      norm = normalize(pos - lightPos);
-      roughness = 0.0;
-      color = lightCol;
-      light = true;
-      hit = true;
-    }
-  }
+  // another if scenario where yoi also check if t > 0.0
+  //  norm is equal to vec3 of 0, 1, 0
+  // color is a vec3 of 1, 0.40, 0.06125 all multiplied by 0.25
+  // roughness is equal to coffee roughness
+  
+  
+  // if (raySphereIntersect(r0, rd, lightPos, light_radius, t)) {
+    // same if as the first one, normalize(pos - lightPos);
+    // roughness is 0.0
+    // color = lightCol
+    // light is true
   return hit;
 }
 
 
 
 void main() {
-  buildMolecule();
-
+// call on buildMolecule
   vec3 src = texture2D(source, gl_FragCoord.xy/resolution).rgb;
   vec2 jitter = vec2(0);
   if (antialias) {
@@ -159,17 +142,12 @@ void main() {
 
   for (int i = 0; i < 20; i++) {
     if (i > bounces) break;
-    vec3 norm, color;
-    float roughness;
-    bool light;
-    if (!intersect(pos, ray, pos, norm, color, roughness, light)) {
-      accum += ambient * mask;
-      break;
-    }
-    if (light) {
-      accum += lightCol * mask;
-      break;
-    }
+    // create vec3 norm and color
+    // create float of roughness and bool of light
+    // check if it does NOT intersect with args pos, ray, pos, norm, color, roughness, light
+    // if so, add to accum by the ambinet * mask. dont forget to break
+
+    // if there is light add lightCol * mask to accum
     mask *= color;
     vec3 _v3;
     float _f;
