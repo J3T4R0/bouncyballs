@@ -32,23 +32,52 @@
 
   <body>
 
-    <div class='flex-center'>
-      <canvas id='render-canvas'></canvas>
-    </div>
+  <div id="top"> 
+    <h1>Bouncing Ball Sim 8404</h1> 
+    <h2>Parametric Curves: Bouncing Balls</h2> 
+    <div id="logo-packt"><img src="packt.png"></div> 
+    <p></p> 
+  </div> 
+  <div id="contents"> 
+    <div id="canvasContainer"> 
+      <!-- <canvas id="canvas-element-id" width="480" height="400"> 
+        Your browser does not support the HTML5 canvas element. 
+      </canvas>  -->
+      <div class='flex-center'>
+        <canvas id='render-canvas'></canvas>
+      </div>
+    </div> 
+  </div> 
+  <div id="buttons">
+    <div id="buttonsCode" class="ui-buttonset">
+      <input type="radio" id="btnSourceCode" name="radio" onclick="cview.loadSource(0)" checked="checked" class="ui-helper-hidden-accessible">
+      <label for="btnSourceCode" class="ui-state-active ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left" aria-pressed="true" role="button" aria-disabled="false">
+        <span class="ui-button-text">WebGL JS</span></label><input type="radio" id="btnVertexShader" name="radio" onclick="cview.loadSource(1)" class="ui-helper-hidden-accessible">
+        <label for="btnVertexShader" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only" role="button" aria-disabled="false">
+          <span class="ui-button-text">Vertex Shader</span></label>
+          <input type="radio" id="btnFragmentShader" name="radio" onclick="cview.loadSource(2)" class="ui-helper-hidden-accessible">
+          <label for="btnFragmentShader" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only" role="button" aria-disabled="false">
+            <span class="ui-button-text">Fragment Shader</span>
+          </label><input type="radio" id="btnHTML" name="radio" onclick="cview.loadSource(3)" class="ui-helper-hidden-accessible">
+          <label for="btnHTML" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right" role="button" aria-disabled="false">
+            <span class="ui-button-text">HTML</span></label>
+          </div><div id="buttonsCanvas" class="ui-buttonset">
+            <input id="btnFullView" type="radio" name="mode" value="view" class="ui-helper-hidden-accessible">
+            <label id="lblFullView" for="btnFullView" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left" role="button" aria-disabled="false">
+              <span class="ui-button-text">View</span></label><input id="btnShowCode" type="radio" name="mode" value="code" class="ui-helper-hidden-accessible">
+              <label id="lblShowCode" for="btnShowCode" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Code</span></label><input id="btnShowControls" type="radio" name="mode" value="controls" class="ui-helper-hidden-accessible">
+              <label id="lblShowControls" for="btnShowControls" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right" role="button" aria-disabled="false">
+                <span class="ui-button-text">Controls</span></label></div></div><div id="bottom"> 
+                <table style="padding=0px"> <tbody><tr> <td> <table cellspacing="4px" style="vertical-align:top"> 
+                <tbody><tr> <td align="center"> <div id="opt-type" class="ui-buttonset">
+                <input type="radio" id="opt-tracking" name="typecam" class="ui-helper-hidden-accessible">
+                <label for="opt-tracking" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left" role="button" aria-disabled="false"><span class="ui-button-text">Tracking</span></label> <input type="radio" id="opt-orbiting" name="typecam" checked="checked" class="ui-helper-hidden-accessible">
+                <label for="opt-orbiting" class="ui-state-active ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right" aria-pressed="true" role="button" aria-disabled="false">
+                <span class="ui-button-text">Orbiting</span></label> </div> </td> <td align="center">
+                <button id="btnGoHome" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+                  <span class="ui-button-text">Go Home</span></button> <input type="checkbox" id="chkUpdateLight" class="ui-helper-hidden-accessible">
+                  <label for="chkUpdateLight" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+                    <span class="ui-button-text">Fixed Light Source</span></label> </td> </tr> </tbody></table> </td> </tr> </tbody></table> </div> <script> $('#chkUpdateLight').button(); $('#opt-type').buttonset(); $('#btnGoHome').button(); $('#chkUpdateLight').click(toggleLight); $('#opt-tracking').click(function(){ camera.goHome(); console.info('CameraType = Tracking'); camera.setType(CAMERA_TRACKING_TYPE); app.refresh(); }); $('#opt-orbiting').click(function(){ camera.goHome(); console.info('CameraType = Orbiting'); camera.setType(CAMERA_ORBITING_TYPE); app.refresh(); }); var updateLightPosition = false; function toggleLight(){ updateLightPosition = !updateLightPosition; } $('#btnGoHome').click( function(){ camera.goHome(); app.refresh(); }); </script> <script>cview.run(cview.MODE_VIEW,false,470);</script> <div id="feedly-mini" title="feedly Mini tookit"></div>
 
-    <a href="https://wwwtyro.net/2018/02/25/caffeine.html">
-      <img class='bottom-right' src='https://wwwtyro.net/media/tut-bottom-right.png'>
-    </a>
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-86179738-1', 'auto');
-      ga('send', 'pageview');
-    </script>
-
-  </body>
-
-</html>
+                  </body> 
+          </html>
