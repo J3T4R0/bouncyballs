@@ -76,20 +76,23 @@ module.exports = function(canvas) {
     wrap: 'repeat',
   });
 
-  // Instead of rendering directly to the display each frame, we’ll create two framebuffers (essentially, textures that can be rendered to), and alternate reading and writing to them each frame. Once we’ve rendered to our current write framebuffer, we’ll render it to the screen
 
   const pingpong = [
     regl.framebuffer({width: canvas.width, height: canvas.height, colorType: 'float'}),
     regl.framebuffer({width: canvas.width, height: canvas.height, colorType: 'float'}),
   ];
 
-// implement variables ping and count and set them to 0
+
+  let ping = 0;
+  let count = 0;
 
 
   const cSample = regl({
     vert: glsl('./glsl/sample.vert'),
     frag: glsl('./glsl/sample.frag'),
-    // create object attributes that holds array positions of the screen
+    attributes: {
+      position: [-1,-1, 1,-1, 1,1, -1,-1, 1,1, -1,1],
+    },
     uniforms: {
       invpv: regl.prop('invpv'),
       eye: regl.prop('eye'),
@@ -136,8 +139,7 @@ module.exports = function(canvas) {
 
 
   function sample(opts) {
-    // create constant view that is a mat4 with built in function lookAt
-    // arguments are [], opts.eye, opts.target, [0, 1, 0] 
+    const view = mat4.lookAt([], opts.eye, opts.target, [0, 1, 0]);
     const projection = mat4.perspective([], Math.PI/3, canvas.width/canvas.height, 0.1, 1000);
     const pv = mat4.multiply([], projection, view);
     const invpv = mat4.invert([], pv);
@@ -175,17 +177,27 @@ module.exports = function(canvas) {
     });
   }
 
-// function reset 
-// regl.clear ->
-//    -> {color: [0,0,0,1], depth: 1, framebuffer: pingpong[0]}
-//    -> {color: [0,0,0,1], depth: 1, framebuffer: pingpong[1] }
-// set count to 0
 
-// function resize with arg resolution
-// canvas.height = canvas.width = resolution;
-// pingpong[i].resize with args canvas width and height, do with 0 and 1
-// reset at end
+  function reset() {
+    regl.clear({ color: [0,0,0,1], depth: 1, framebuffer: pingpong[0] });
+    regl.clear({ color: [0,0,0,1], depth: 1, framebuffer: pingpong[1] });
+    count = 0;
+  }
 
-  // return the data structure with values sample, display, reset, resize. Assign the keys with the same values
+
+  function resize(resolution) {
+    canvas.height = canvas.width = resolution;
+    pingpong[0].resize(canvas.width, canvas.height);
+    pingpong[1].resize(canvas.width, canvas.height);
+    reset();
+  }
+
+
+  return {
+    sample: sample,
+    display: display,
+    reset: reset,
+    resize: resize,
+  };
 
 }

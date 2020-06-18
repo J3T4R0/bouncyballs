@@ -17,9 +17,9 @@ var camera = null;
 var interactor = null; 
 var transforms = null; 
 var sceneTime = 0.0; 
-// define ball as empty array
-// define BALL_GRAVITY as float of gravity
-// define number of balls 
+var ball = []; 
+var BALL_GRAVITY = 9.8; 
+var NUM_BALLS = 50; 
 function generatePosition(){ 
   var x = Math.floor(Math.random()*50); 
   var y = Math.floor(Math.random()*30)+50; 
@@ -161,17 +161,6 @@ function generatePosition(){
           setInterval(onFrame,animationRate/1000); 
           // animation rate 
         } 
-        /** * Entry point. This function is invoked when the page is loaded */ 
-        // var app = null; 
-        // function runWebGLApp() {
-        //    app = new WebGLApp("canvas-element-id"); 
-        //    app.configureGLHook = configure; 
-        //    app.loadSceneHook = load; 
-        //    app.drawSceneHook = draw;
-        //    app.run();
-        //    startAnimation(); 
-        // }
-
 
 
 function reflow() {
@@ -196,7 +185,7 @@ const Control = function() {
     });
   }
   this.atom_roughness = 0.0;
-  this.surface_roughness = 0.0;
+  this.coffee_roughness = 0.0;
   this.light_radius = 4.0;
   this.light_intensity = 4.1;
   this.light_angle = 4.73;
@@ -215,7 +204,7 @@ gui.add(control, 'samples').name('Samples/Frame').min(1).max(16).step(1);
 gui.add(control, 'antialias').name('Antialias').onChange(renderer.reset);
 gui.add(control, 'converge').name('Converge');
 gui.add(control, 'atom_roughness').name('Atom Roughness').min(0).max(1).onChange(renderer.reset);
-gui.add(control, 'surface_roughness').name('Surface Roughness').min(0).max(1).onChange(renderer.reset);
+gui.add(control, 'coffee_roughness').name('Coffee Roughness').min(0).max(1).onChange(renderer.reset);
 gui.add(control, 'light_radius').name('Light Radius').min(0.01).max(4.0).onChange(renderer.reset);
 gui.add(control, 'light_intensity').name('Light Intensity').min(0.01).max(16.0).onChange(renderer.reset);
 gui.add(control, 'light_angle').name('Light Angle').min(0).max(Math.PI*2).onChange(renderer.reset);
@@ -242,7 +231,7 @@ function loop() {
       target: target,
       model: trackball.rotation,
       atom_roughness: control.atom_roughness,
-      surface_roughness: control.surface_roughness,
+      coffee_roughness: control.coffee_roughness,
       light_radius: control.light_radius,
       light_intensity: control.light_intensity,
       light_angle: control.light_angle,
@@ -253,7 +242,6 @@ function loop() {
     });
   }
   renderer.display();
-// call on startAnimation function
   if (!control.converge) renderer.reset();
   requestAnimationFrame(loop);
 }
