@@ -220,12 +220,12 @@ gui.add(control, 'focal_plane').name('Focal Plane').min(-5).max(5).onChange(rend
 gui.add(control, 'focal_length').name('Focal Length').min(0).max(1).onChange(renderer.reset);
 gui.add(control, 'saveButton').name('Save Image');
 }
-// const trackball = new Trackball(canvas, {
-//   drag: 0.05,
-//   onRotate: renderer.reset,
-// });
+const trackball = new Trackball(canvas, {
+  drag: 0.05,
+  onRotate: renderer.reset,
+});
 
-// trackball.spin(17, 47);
+trackball.spin(17, 47);
 
 
 function loop() {
