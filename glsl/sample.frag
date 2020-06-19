@@ -1,4 +1,6 @@
-precision highp float;
+#ifdef GL_ES 
+precision highp float; 
+#endif 
 
 uniform sampler2D source, tRand2Uniform, tRand2Normal, tRand3Normal;
 uniform mat4 model, invpv;
@@ -10,51 +12,22 @@ uniform float focal_plane, focal_length;
 uniform float randsize;
 uniform bool antialias;
 uniform int bounces;
+uniform vec2 norm, color;
+uniform float roughness = 0.0;
 
 
-struct element {
-  float radius;
-  vec3 color;
-};
-
-const element H = element(0.310, vec3(1.000, 1.000, 1.000));
-const element N = element(0.710, vec3(0.188, 0.314, 0.973));
-const element C = element(0.730, vec3(0.565, 0.565, 0.565));
-const element O = element(0.660, vec3(1.000, 0.051, 0.051));
-
-// create struct called atom that holds a vec3 of position and an element called element
-
-
-
-atom atoms[24];
-
-
-void buildMolecule() {
-  atoms[ 0] = atom(vec3(-3.3804130, -1.1272367,  0.5733036), H);
-  atoms[ 1] = atom(vec3( 0.9668296, -1.0737425, -0.8198227), N);
-  atoms[ 2] = atom(vec3( 0.0567293,  0.8527195,  0.3923156), C);
-  atoms[ 3] = atom(vec3(-1.3751742, -1.0212243, -0.0570552), N);
-  atoms[ 4] = atom(vec3(-1.2615018,  0.2590713,  0.5234135), C);
-  atoms[ 5] = atom(vec3(-0.3068337, -1.6836331, -0.7169344), C);
-  atoms[ 6] = atom(vec3( 1.1394235,  0.1874122, -0.2700900), C);
-  atoms[ 7] = atom(vec3( 0.5602627,  2.0839095,  0.8251589), N);
-  atoms[ 8] = atom(vec3(-0.4926797, -2.8180554, -1.2094732), O);
-  atoms[ 9] = atom(vec3(-2.6328073, -1.7303959, -0.0060953), C);
-  atoms[10] = atom(vec3(-2.2301338,  0.7988624,  1.0899730), O);
-  atoms[11] = atom(vec3( 2.5496990,  2.9734977,  0.6229590), H);
-  atoms[12] = atom(vec3( 2.0527432, -1.7360887, -1.4931279), C);
-  atoms[13] = atom(vec3(-2.4807715, -2.7269528,  0.4882631), H);
-  atoms[14] = atom(vec3(-3.0089039, -1.9025254, -1.0498023), H);
-  atoms[15] = atom(vec3( 2.9176101, -1.8481516, -0.7857866), H);
-  atoms[16] = atom(vec3( 2.3787863, -1.1211917, -2.3743655), H);
-  atoms[17] = atom(vec3( 1.7189877, -2.7489920, -1.8439205), H);
-  atoms[18] = atom(vec3(-0.1518450,  3.0970046,  1.5348347), C);
-  atoms[19] = atom(vec3( 1.8934096,  2.1181245,  0.4193193), C);
-  atoms[20] = atom(vec3( 2.2861252,  0.9968439, -0.2440298), N);
-  atoms[21] = atom(vec3(-0.1687028,  4.0436553,  0.9301094), H);
-  atoms[22] = atom(vec3( 0.3535322,  3.2979060,  2.5177747), H);
-  atoms[23] = atom(vec3(-1.2074498,  2.7537592,  1.7203047), H);
-}
+uniform bool uWireframe;
+ uniform vec4 uLightAmbient; 
+ uniform vec4 uLightDiffuse; 
+ uniform vec4 uLightSpecular;
+  uniform vec4 uMaterialAmbient; 
+  uniform vec4 uMaterialDiffuse; 
+  uniform vec4 uMaterialSpecular; 
+  uniform float uShininess; 
+  varying vec3 vNormal; 
+  varying vec3 vLightRay; 
+  varying vec3 vEyeVec; 
+  varying vec4 vFinalColor; 
 
 
 vec2 randState = vec2(0);
@@ -96,33 +69,72 @@ bool intersect(vec3 r0, vec3 rd, out vec3 pos, out vec3 norm, out vec3 color, ou
   float tmin = 1e38, t;
   bool hit = false;
   for (int i = 0; i < 24; i++) {
-    vec3 s = vec3(model * vec4(atoms[i].position, 1));
-    if (raySphereIntersect(r0, rd, s, atoms[i].element.radius * 1.2, t)) {
-      // if t < tmin then set tmin to t
-      // pos is equal to r0 + rd * t
-      // set norm to normalize(pos - s)
-      // color is atoms[i].element.color
-      // set light to false and hit = true
-    
+    vec3 s = vec3(model * Id);
+    if (raySphereIntersect(r0, rd, s, 5 * 1.2, t)) {
+      if (t < tmin) {
+        tmin = t;
+        pos = r0 + rd * t;
+        norm = normalize(pos - s);
+        roughness = atom_roughness;
+        color =  vec3(1, 0.40, 0.06125) * 0.25;
+        light = false;
+        hit = true;
+      }
+    }
+  }
   t = (-2.0 - r0.y) / rd.y;
-  // another if scenario where yoi also check if t > 0.0
-  //  norm is equal to vec3 of 0, 1, 0
-  // color is a vec3 of 1, 0.40, 0.06125 all multiplied by 0.25
-  // roughness is equal to coffee roughness
-  
-  
-  // if (raySphereIntersect(r0, rd, lightPos, light_radius, t)) {
-    // same if as the first one, normalize(pos - lightPos);
-    // roughness is 0.0
-    // color = lightCol
-    // light is true
+  if (t < tmin && t > 0.0) {
+    tmin = t;
+    pos = r0 + rd * t;
+    norm = vec3(0,1,0);
+    color = vec3(1, 0.40, 0.06125) * 0.25;
+    roughness = coffee_roughness;
+    light = false;
+    hit = true;
+  }
+  if (raySphereIntersect(r0, rd, lightPos, light_radius, t)) {
+    if (t < tmin) {
+      tmin = t;
+      pos = r0 + rd * t;
+      norm = normalize(pos - lightPos);
+      roughness = 0.0;
+      color = lightCol;
+      light = true;
+      hit = true;
+    }
+  }
   return hit;
 }
 
 
 
 void main() {
-// call on buildMolecule
+  if(uWireframe){ 
+        gl_FragColor = vFinalColor;
+        }
+        else{ 
+            vec3 L = normalize(vLightRay);
+             vec3 N = normalize(vNormal);
+              //Lambert's cosine law
+            float lambertTerm = dot(N,-L); 
+            //Ambient Term 
+            vec4 Ia = uLightAmbient * uMaterialAmbient;
+             //Diffuse Term 
+            vec4 Id = vec4(0.0,0.0,0.0,1.0); 
+            //Specular Term 
+            vec4 Is = vec4(0.0,0.0,0.0,1.0); 
+            if(lambertTerm > 0.0) { 
+                Id = uLightDiffuse * uMaterialDiffuse * lambertTerm;
+                vec3 E = normalize(vEyeVec); vec3 R = reflect(L, N); 
+                float specular = pow( max(dot(R, E), 0.0), uShininess); 
+                Is = uLightSpecular * uMaterialSpecular * specular; 
+            }
+             //Final color 
+             vec4 finalColor = Ia + Id + Is; finalColor.a = 1.0;
+              gl_FragColor = finalColor; 
+            } 
+
+
   vec3 src = texture2D(source, gl_FragCoord.xy/resolution).rgb;
   vec2 jitter = vec2(0);
   if (antialias) {
@@ -141,13 +153,18 @@ void main() {
   vec3 mask = vec3(1);
 
   for (int i = 0; i < 20; i++) {
-    if (i > bounces) break;
-    // create vec3 norm and color
-    // create float of roughness and bool of light
-    // check if it does NOT intersect with args pos, ray, pos, norm, color, roughness, light
-    // if so, add to accum by the ambinet * mask. dont forget to break
-
-    // if there is light add lightCol * mask to accum
+     if (i > bounces) break;
+    vec3 norm, color;
+    float roughness;
+    bool light;
+    if (!intersect(pos, ray, pos, norm, color, roughness, light)) {
+      accum += ambient * mask;
+      break;
+    }
+    if (light) {
+      accum += lightCol * mask;
+      break;
+    }
     mask *= color;
     vec3 _v3;
     float _f;
