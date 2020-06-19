@@ -31,6 +31,8 @@
   </style>
 
   <body>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js">
 
   <div id="top"> 
     <h1>Bouncing Ball Sim 8404</h1> 
@@ -38,13 +40,14 @@
     <div id="logo-packt"><img src="packt.png"></div> 
     <p></p> 
   </div> 
+   <canvas id='render-canvas' width="512" height="512"></canvas>
   <div id="contents"> 
     <div id="canvasContainer"> 
       <!-- <canvas id="canvas-element-id" width="480" height="400"> 
         Your browser does not support the HTML5 canvas element. 
       </canvas>  -->
       <div class='flex-center'>
-        <canvas id='render-canvas'></canvas>
+       
       </div>
     </div> 
   </div> 
@@ -77,7 +80,7 @@
                 <button id="btnGoHome" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
                   <span class="ui-button-text">Go Home</span></button> <input type="checkbox" id="chkUpdateLight" class="ui-helper-hidden-accessible">
                   <label for="chkUpdateLight" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
-                    <span class="ui-button-text">Fixed Light Source</span></label> </td> </tr> </tbody></table> </td> </tr> </tbody></table> </div> <script> $('#chkUpdateLight').button(); $('#opt-type').buttonset(); $('#btnGoHome').button(); $('#chkUpdateLight').click(toggleLight); $('#opt-tracking').click(function(){ camera.goHome(); console.info('CameraType = Tracking'); camera.setType(CAMERA_TRACKING_TYPE); app.refresh(); }); $('#opt-orbiting').click(function(){ camera.goHome(); console.info('CameraType = Orbiting'); camera.setType(CAMERA_ORBITING_TYPE); app.refresh(); }); var updateLightPosition = false; function toggleLight(){ updateLightPosition = !updateLightPosition; } $('#btnGoHome').click( function(){ camera.goHome(); app.refresh(); }); </script> <script>cview.run(cview.MODE_VIEW,false,470);</script> <div id="feedly-mini" title="feedly Mini tookit"></div>
+                    <span class="ui-button-text">Fixed Light Source</span></label> </td> </tr> </tbody></table> </td> </tr> </tbody></table> </div> <script> $('#chkUpdateLight').button(); $('#opt-type').buttonset(); $('#btnGoHome').button(); $('#chkUpdateLight').click(toggleLight); $('#opt-tracking').click(function(){ camera.goHome(); console.info('CameraType = Tracking'); camera.setType(CAMERA_TRACKING_TYPE); app.refresh(); }); $('#opt-orbiting').click(function(){ camera.goHome(); console.info('CameraType = Orbiting'); camera.setType(CAMERA_ORBITING_TYPE); app.refresh(); }); var updateLightPosition = false; function toggleLight(){ updateLightPosition = !updateLightPosition; } $('#btnGoHome').click( function(){ camera.goHome(); app.refresh(); }); </script> 
 
                   </body> 
           </html>

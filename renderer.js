@@ -78,8 +78,8 @@ module.exports = function(canvas) {
 
 
   const pingpong = [
-    regl.framebuffer({width: canvas.width, height: canvas.height, colorType: 'float'}),
-    regl.framebuffer({width: canvas.width, height: canvas.height, colorType: 'float'}),
+    regl.framebuffer({width: 512, height: 512, colorType: 'float'}),
+    regl.framebuffer({width: 512, height: 512, colorType: 'float'}),
   ];
 
 
@@ -191,6 +191,8 @@ module.exports = function(canvas) {
     pingpong[1].resize(canvas.width, canvas.height);
     reset();
   }
+
+ 
 
 
   return {

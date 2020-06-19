@@ -13,7 +13,7 @@ uniform float randsize;
 uniform bool antialias;
 uniform int bounces;
 uniform vec2 norm, color;
-uniform float roughness = 0.0;
+uniform float roughness;
 
 
 uniform bool uWireframe;
@@ -24,10 +24,10 @@ uniform bool uWireframe;
   uniform vec4 uMaterialDiffuse; 
   uniform vec4 uMaterialSpecular; 
   uniform float uShininess; 
-  varying vec3 vNormal; 
-  varying vec3 vLightRay; 
-  varying vec3 vEyeVec; 
-  varying vec4 vFinalColor; 
+  uniform vec3 vNormal; 
+  uniform vec3 vLightRay; 
+  uniform vec3 vEyeVec; 
+ uniform vec4 vFinalColor; 
 
 
 vec2 randState = vec2(0);
@@ -69,8 +69,8 @@ bool intersect(vec3 r0, vec3 rd, out vec3 pos, out vec3 norm, out vec3 color, ou
   float tmin = 1e38, t;
   bool hit = false;
   for (int i = 0; i < 24; i++) {
-    vec3 s = vec3(model * Id);
-    if (raySphereIntersect(r0, rd, s, 5 * 1.2, t)) {
+    vec3 s = vec3(model * vec4(0.0,0.0,0.0,1.0));
+    if (raySphereIntersect(r0, rd, s, 6.0, t)) {
       if (t < tmin) {
         tmin = t;
         pos = r0 + rd * t;
